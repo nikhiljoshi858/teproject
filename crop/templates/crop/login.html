@@ -1,0 +1,16 @@
+{% extends 'crop/header.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {% csrf_token %}
+        {{form.as_p}}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<br>
+<p>If you don't already have an account <a href="/register" target="blank"><strong>Create One</strong></a> instead.</p>
+<br>
+{% endblock %}

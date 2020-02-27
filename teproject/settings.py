@@ -52,6 +52,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'teproject.urls'
 
+STATIC_URL = '/static/'
+
+ACCOUNT_SIGNUP_FORM_CLASS = 'web.forms.UserForm'
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
