@@ -56,6 +56,8 @@ STATIC_URL = '/static/'
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'web.forms.UserForm'
 
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
+MEDIA_URL = '/media/'
 
 TEMPLATES = [
     {

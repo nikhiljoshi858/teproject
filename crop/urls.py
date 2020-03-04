@@ -15,14 +15,18 @@ Including another URLconf
 """
 from . import views
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'crop'
 
 urlpatterns = [
-    path("", views.homepage, name='homepage'),
+    path('', views.homepage, name='homepage'),
     path('register/', views.register, name='register'),
     path('login/', views.login_request, name='login_request'),
     path('logout/', views.logout_request, name='logout_request'),
-    path('crop/', views.crop_predict, name='crop_predict'),
-    path('disease/', views.disease_predict, name='disease_predict')
-]
+    path('crop/personal/', views.crop_predict_personal, name='crop_predict'),
+    path('crop/land/', views.crop_predict_land, name='crop_predict_land'),
+    path('disease/upload', views.disease_predict_upload, name='disease_predict_upload'),
+    path('disease/predict', views.disease_predict, name='disease_predict'),
+] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

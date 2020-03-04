@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from .forms import UserForm, LoginForm
+from .forms import *
 from django.contrib.auth.models import User
+from .models import *
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def homepage(request):
@@ -67,8 +69,43 @@ def login_request(request):
 				  {"form":form})
 
 
-def crop_predict(request):
-    return HttpResponse('Crop Prediction')
+@login_required(redirect_field_name='crop/personal/')
+def crop_predict_personal(request):
+	if request.method=='POST':
+		form = PersonalDetailsForm(request.POST)
+		if form.is_valid():
+			fn = form.cleaned_data.get('firstname')
+			ln = form.cleaned_data.get('lastname')
+			email = form.cleaned_data.get('email')
+			contact = form.cleaned_data.get('contact')
+			gender = form.cleaned_data.get('gender')
+			pd = PersonalDetails(user_id=request.user,firstname=fn,lastname=ln,email=email,contact=contact,gender=gender)
+			pd.save()
+			return redirect('crop:crop_predict_land')
+	
+	form = PersonalDetailsForm()
+	return render(request, 'crop/landdetails.html',context={'form':form})
+	
+
+@login_required(redirect_field_name='crop/personal/')
+def crop_predict_land(request):
+	
+	return render(request, 'crop/crop_prediction.html')
+
+
+@login_required(redirect_field_name='disease/predict/')
+def disease_predict_upload(request):
+    # return HttpResponse('Disease Prediction')
+	if request.method=='POST':
+		form = DiseaseImageForm(request.POST)
+		if form.is_valid():
+			img = form.cleaned_data.get('image')
+			return HttpResponse(str(img))
+			# form.save()
+			# return HttpResponse('Uploaded')
+	form = DiseaseImageForm()
+	return render(request, 'crop/diseaseimage.html', context={'form':form})
+
 
 def disease_predict(request):
-    return HttpResponse('Disease Prediction')
+	return HttpResponse('Disease Predict')
