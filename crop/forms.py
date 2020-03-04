@@ -53,5 +53,5 @@ class DiseaseImageForm(forms.Form):
 
 
 
-class CropPredictionForm(forms.Form):
-    
+# class CropPredictionForm(forms.Form):
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
