@@ -1,0 +1,18 @@
+{% extends "crop/header.html" %}
+
+{% block content %}
+    <h2>Fill in your Land Details here:</h2>
+    <div class="col-md-3">
+        <form method='POST'>
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type='submit' class='btn btn-primary'>Submit</button>
+        </form>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            <p>MAP</p>
+        </div>
+    </div>
+    <br>
+{% endblock %}

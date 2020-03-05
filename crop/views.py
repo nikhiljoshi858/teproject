@@ -69,7 +69,7 @@ def login_request(request):
 				  {"form":form})
 
 
-@login_required(redirect_field_name='crop/personal/')
+@login_required()
 def crop_predict_personal(request):
 	if request.method=='POST':
 		form = PersonalDetailsForm(request.POST)
@@ -84,16 +84,21 @@ def crop_predict_personal(request):
 			return redirect('crop:crop_predict_land')
 	
 	form = PersonalDetailsForm()
-	return render(request, 'crop/landdetails.html',context={'form':form})
+	return render(request, 'crop/land_details.html',context={'form':form})
 	
 
-@login_required(redirect_field_name='crop/personal/')
+@login_required()
 def crop_predict_land(request):
 	
-	return render(request, 'crop/crop_prediction.html')
+	return render(request, 'crop/land_details.html')
 
 
-@login_required(redirect_field_name='disease/predict/')
+@login_required()
+def crop_predict(request):
+	return render(request,'crop/crop_predict.html')
+
+
+@login_required()
 def disease_predict_upload(request):
     # return HttpResponse('Disease Prediction')
 	if request.method=='POST':
@@ -104,8 +109,12 @@ def disease_predict_upload(request):
 			# form.save()
 			# return HttpResponse('Uploaded')
 	form = DiseaseImageForm()
-	return render(request, 'crop/diseaseimage.html', context={'form':form})
+	return render(request, 'crop/disease_image.html', context={'form':form})
 
 
+@login_required()
 def disease_predict(request):
-	return HttpResponse('Disease Predict')
+	return render(request, 'crop/disease_predict.html')
+
+def disease_solutions(request):
+	return render(request, 'crop/disease_solutions.html')
