@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -7,6 +7,8 @@ from .forms import *
 from django.contrib.auth.models import User
 from .models import *
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
+from django.core import serializers
 # Create your views here.
 
 def homepage(request):
@@ -89,8 +91,9 @@ def crop_predict_personal(request):
 
 @login_required()
 def crop_predict_land(request):
-	
-	return render(request, 'crop/land_details.html')
+	states = State.objects.all()
+	# print(states)
+	return render(request, 'crop/land_details.html', {"states": states})
 
 
 @login_required()
@@ -118,3 +121,13 @@ def disease_predict(request):
 
 def disease_solutions(request):
 	return render(request, 'crop/disease_solutions.html')
+
+
+
+
+# get district for ajax
+def get_dist(request):
+	dists = District.objects.filter(state=request.GET['state'])
+	dists = serializers.serialize("json",dists)
+	print(dists)
+	return JsonResponse(dists, safe=False)

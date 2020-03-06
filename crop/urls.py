@@ -30,5 +30,6 @@ urlpatterns = [
     path('crop/predict/', views.crop_predict, name='crop_predict'),
     path('disease/upload', views.disease_predict_upload, name='disease_predict_upload'),
     path('disease/predict', views.disease_predict, name='disease_predict'),
-    path('disease/solutions', views.disease_solutions, name='disease_solutions')
+    path('disease/solutions', views.disease_solutions, name='disease_solutions'),
+    path("get_dist", views.get_dist,name="get_dist"),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
