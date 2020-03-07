@@ -1,6 +1,8 @@
 {% extends "crop/header.html" %}
 
 {% block content %}
+
+<div class="jumbotron" style="margin-left: 11%; margin-top:4%; ">
     <h2>Upload an Image of the <strong>LEAF</strong> of the crop</h2>
     <form method='POST' enctype='multipart/form-data'>
         {% csrf_token %}
@@ -8,4 +10,5 @@
         <button type='submit' class='btn btn-primary'>Predict</button>
     </form>
     <br>
+</div>
 {% endblock %}

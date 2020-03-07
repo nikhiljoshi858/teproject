@@ -1,6 +1,7 @@
 {% extends 'crop/header.html' %}
 
 {% block content %}
+<div class="jumbotron" style="margin-left: 11%; margin-top:4%; ">
 <h2>Login (Only for Registered Users)</h2><br>
 <form method="POST">
     {% csrf_token %}
@@ -10,7 +11,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
+</div>
 <br>
 <p>If you don't already have an account <a href="/register" target="blank"><strong>Create One</strong></a> instead.</p>
 <br>
