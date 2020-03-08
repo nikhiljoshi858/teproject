@@ -20,13 +20,18 @@ class PersonalDetails(models.Model):
 
 
 
-class DiseaseDetails(models.Model):
+class DiseaseCause(models.Model):
     name = models.CharField(max_length=500)
-    cause = models.CharField(max_length=500)
-    solution = models.CharField(max_length=1000)
+    cause = models.CharField(max_length=1000)
     def __str__(self):
         return self.name
 
+
+class DiseaseSolution(models.Model):
+    name = models.CharField(max_length=500)
+    solution = models.CharField(max_length=1000)
+    def __str__(self):
+        return self.name
 
 class State(models.Model):
     name = models.CharField(max_length=50)
