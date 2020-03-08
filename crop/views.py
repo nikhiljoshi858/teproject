@@ -164,7 +164,7 @@ def disease_predict_upload(request):
 				if value == predict:
 					st = key
 			crop,disease = st.split("___")
-			return render(request, "crop/disease_predict.html", context={"crop":crop, "disease":disease})
+			return render(request, "crop/disease_predict.html", context={"crop":crop,"disease":disease})
 			# form.save()
 			# return HttpResponse('Uploaded')
 		else:
