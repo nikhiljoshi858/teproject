@@ -1,18 +1,76 @@
 {% extends "crop/header.html" %}
 
 {% block content %}
-    <h2>Fill in your Land Details here:</h2>
+<div class="jumbotron" style="margin-left: 11%; margin-top:4%; ">
+<h2>Fill in your Land Details here:</h2>
+<div class="row">
     <div class="col-md-3">
         <form method='POST'>
             {% csrf_token %}
-            {{form.as_p}}
+            <label for="state">Select State</label>
+            <select name="state" id="state" class="form-control">
+                {% for state in states %}
+                <option value="{{state.id}}" class="uppercase">{{state.name}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="dist">Select District</label>
+            <select class="form-control" name="dist" id="dist">
+            </select>
+            <br>
             <button type='submit' class='btn btn-primary'>Submit</button>
         </form>
     </div>
     <div class="col-md-9">
         <div class="row">
-            <p>MAP</p>
+            <div onload="loadMapScenario()" id='myMap' style='width: 100vw; height: 50vh;'></div>
         </div>
     </div>
-    <br>
+</div>
+</div>
+<br>
+<script type='text/javascript'>
+    function loadMapScenario() {
+        var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+            /* No need to set credentials if already passed in URL */
+            // center: new Microsoft.Maps.Location(51.50632, -0.12714),
+            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+            zoom: 10
+        });
+        
+    }
+    $("#state").change(function () {
+        $.ajax({
+            url:"http://dev.virtualearth.net/REST/v1/Locations/"+$("#state option:selected").html()+"?&maxResults=1&key=AiTdUBKTZJ75d7IeoOiirf-13eQLgmINgtCPeL3LZRQDVbiAio4RMDgUcpqIS5xq",
+            success:function(result){
+                // console.log(result);
+                // alert(result["resourceSets"][0]["resources"][0]["point"]);
+                var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                    /* No need to set credentials if already passed in URL */
+                    center: new Microsoft.Maps.Location(result["resourceSets"][0]["resources"][0]["point"]["coordinates"][0],result["resourceSets"][0]["resources"][0]["point"]["coordinates"][1]),
+                    mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+                    zoom: 7
+                });
+            }
+        });
+        $.ajax({
+            url: "{% url 'crop:get_dist' %}",
+            type: "GET",
+            data: { "state": $("#state").val() },
+            success: function (result) {
+                $("#dist").empty();
+                result = JSON.parse(result);
+                // alert(result[0]["pk"]);
+                // alert("<option value='"+result[i]["pk"]+"'>"+result[i]["fields"]["dname"]+"</option>");
+                for(var i=0;i<result.length;i++){
+                    $("#dist").append("<option value='"+result[i]['pk']+"'>"+result[i]["fields"]["dname"]+"</option>")
+                }
+                
+            }
+        }
+
+        );
+    });
+</script>
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AiTdUBKTZJ75d7IeoOiirf-13eQLgmINgtCPeL3LZRQDVbiAio4RMDgUcpqIS5xq&callback=loadMapScenario' async defer></script>
 {% endblock %}
