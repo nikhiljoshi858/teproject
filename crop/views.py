@@ -13,7 +13,7 @@ import cv2
 import numpy as np
 from django.core.files.storage import default_storage
 from django.conf import settings
-# import tensorflow as tf
+from tensorflow.keras.models import load_model
 
 # Create your views here.
 
@@ -116,9 +116,10 @@ def disease_predict_upload(request):
 			file_name = default_storage.save(img.name, img)
 			img = cv2.imread(settings.MEDIA_ROOT+"/"+file_name)
 			img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-			image = tf.cast(img, tf.float32)
-			img3 = np.asarray([image])
-			loaded_model = tf.keras.models.load_model(settings.MEDIA_ROOT+"/disease_model_final.h5")
+			# image = tf.cast(img, tf.float32)
+			img3 = np.asarray([img])
+			# return HttpResponse(img3.shape)
+			loaded_model = load_model(settings.MEDIA_ROOT+"/disease_model_final.h5")
 			predicted = loaded_model.predict_classes(img3)
 			mapping = {'Apple___Apple_scab': 0,
 			'Apple___Black_rot': 1,
@@ -164,9 +165,7 @@ def disease_predict_upload(request):
 				if value == predict:
 					st = key
 			crop,disease = st.split("___")
-			return render(request, "crop/disease_predict.html", context={"crop":crop,"disease":disease})
-			# form.save()
-			# return HttpResponse('Uploaded')
+			return render(request, "crop/disease_predict.html", context={'file_name':file_name,"st":st,"crop":crop,"disease":disease})
 		else:
 			return HttpResponse("error")
 	form = DiseaseImageForm()
@@ -177,8 +176,11 @@ def disease_predict_upload(request):
 def disease_predict(request):
 	return render(request, 'crop/disease_predict.html')
 
-def disease_solutions(request):
-	return render(request, 'crop/disease_solutions.html')
+def disease_solutions(request,st):
+	disease = st.split('___')[1]
+	causes = DiseaseCause.objects.filter(name=st)
+	solutions = DiseaseSolution.objects.filter(name=st)
+	return render(request, 'crop/disease_solutions.html', context={'disease':disease,'causes':causes, 'solutions':solutions})
 
 
 

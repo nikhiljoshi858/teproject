@@ -1,5 +1,19 @@
 {% extends "crop/header.html" %}
 
 {% block content %}
-    <p>Solutions</p>
+<div class="jumbotron">
+    <h2><strong>Detected Disease :</strong> {{disease}}</h2><br>
+    <h2><strong>Causes/Favourable Conditions</strong></h2>
+    <ul style="list-style-type:disc;">
+        {% for i in causes %}
+        <li><h4>{{i}}</h4></li>
+        {% endfor %}
+    </ul><br>
+    <h2><strong>Solutions/Preventive Measures</strong></h2>
+    <ul style="list-style-type:disc;">
+        {% for i in solutions %}
+        <li><h4>{{i}}</h4></li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

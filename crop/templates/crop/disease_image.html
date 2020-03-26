@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="jumbotron" style="margin-left: 11%; margin-top:4%; ">
-    <h2>Upload an Image of the <strong>LEAF</strong> of the crop</h2>
+    <h2>Upload an Image of the <strong>LEAF</strong> of the crop</h2><br>
     <form method='POST' enctype='multipart/form-data'>
         {% csrf_token %}
         {{form.as_p}}

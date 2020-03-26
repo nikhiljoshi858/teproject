@@ -1,11 +1,13 @@
 {% extends "crop/header.html" %}
 
 {% block content %}
-    <h2>Fill in your Personal Details here:</h2>
+<div class="jumbotron">
+    <h2>Fill in your Personal Details here:</h2><br>
     <form method='POST'>
         {% csrf_token %}
         {{form.as_p}}
         <button type='submit' class='btn btn-primary'>Continue</button>
     </form>
     <br>
+</div>
 {% endblock %}

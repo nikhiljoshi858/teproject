@@ -24,14 +24,14 @@ class DiseaseCause(models.Model):
     name = models.CharField(max_length=500)
     cause = models.CharField(max_length=1000)
     def __str__(self):
-        return self.name
+        return self.cause
 
 
 class DiseaseSolution(models.Model):
     name = models.CharField(max_length=500)
     solution = models.CharField(max_length=1000)
     def __str__(self):
-        return self.name
+        return self.solution
 
 class State(models.Model):
     name = models.CharField(max_length=50)
