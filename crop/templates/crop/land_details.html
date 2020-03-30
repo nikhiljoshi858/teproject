@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-3">
             <h2>Fill in your Land Details here:</h2><br>
-        <form method='POST'>
+        <form method='POST' id="myfrm">
             {% csrf_token %}
             <label for="state">Select State</label>
             <select name="state" id="state" class="form-control">
@@ -17,6 +17,16 @@
             <label for="dist">Select District</label>
             <select class="form-control" name="dist" id="dist"></select>
             <br>
+            <label for="soil">Soil Type</label>
+            <select name="soil" id="soil" class='form-control'>
+                <option value="100">Laterite</option>
+                <option value="001">Sandy</option>
+                <option value="010">Loamy</option>
+            </select>
+            <input type="hidden" name="hum" id="hum" value="">
+            <input type="hidden" name="rain" id="rain" value="">
+            <input type="hidden" name="temp" id="temp" value="">
+            <!-- <input type="hidden" name="quat" id="quat"> -->
             <button type='submit' class='btn btn-primary'>Submit</button>
         </form>
     </div>
@@ -67,8 +77,40 @@
                 
             }
         }
-
         );
+    });
+    $("#dist").change(function(){
+        $.ajax({
+            url:"http://dev.virtualearth.net/REST/v1/Locations/"+$("#dist option:selected").html()+"?&maxResults=1&key=AiTdUBKTZJ75d7IeoOiirf-13eQLgmINgtCPeL3LZRQDVbiAio4RMDgUcpqIS5xq",
+            success:function(result){
+                // console.log(result);
+                // alert(result["resourceSets"][0]["resources"][0]["point"]);
+                var lat = result["resourceSets"][0]["resources"][0]["point"]["coordinates"][0];
+                var long = result["resourceSets"][0]["resources"][0]["point"]["coordinates"][1];
+                $.ajax({
+                url:"http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+long+"&APPID=03bd29cd2497753776e0506b0fce46a2",
+                    success:function(result){
+                        if(result["rain"] == null){
+                            result["rain"] = 650;
+                            // console.log(result);
+                            // alert(result["main"]["humidity"]);
+                            $("#hum").val(result["main"]["humidity"]);
+                            $("#temp").val(result["main"]["temp"]);
+                            $("#rain").val(result["rain"]);
+                        }
+                        
+                    }
+                });
+                $("#myfrm").append("<input type='hidden' name='lat' value='"+lat+"'>");
+                $("#myfrm").append("<input type='hidden' name='long' value='"+long+"'>");
+                var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                    /* No need to set credentials if already passed in URL */
+                    center: new Microsoft.Maps.Location(result["resourceSets"][0]["resources"][0]["point"]["coordinates"][0],result["resourceSets"][0]["resources"][0]["point"]["coordinates"][1]),
+                    mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+                    zoom: 15
+                });
+            }
+        });
     });
 </script>
 <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AiTdUBKTZJ75d7IeoOiirf-13eQLgmINgtCPeL3LZRQDVbiAio4RMDgUcpqIS5xq&callback=loadMapScenario' async defer></script>

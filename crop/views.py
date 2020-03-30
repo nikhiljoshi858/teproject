@@ -14,7 +14,9 @@ import numpy as np
 from django.core.files.storage import default_storage
 from django.conf import settings
 from tensorflow.keras.models import load_model
-
+from sklearn.tree import DecisionTreeClassifier
+import joblib
+from datetime import date
 # Create your views here.
 
 def homepage(request):
@@ -96,8 +98,52 @@ def crop_predict_personal(request):
 
 @login_required()
 def crop_predict_land(request):
+	if request.method == "POST":
+		# crop = request.POST["soil"]
+		model = joblib.load(settings.MEDIA_ROOT+"/model.h5")
+		hum = request.POST["hum"]
+		rain = request.POST["rain"]
+		temp = request.POST["temp"]
+		today = date.today()
+		today = today.month
+		if today<=3:
+			quat = 1
+		elif today<=6:
+			quat = 2
+		elif today<=9:
+			quat = 3
+		elif today<=12:
+			quat = 4
+		ls = [quat,rain,temp,hum]+list(request.POST["soil"])
+		result = model.predict([ls])
+		result = int(result)
+		if result==0:
+			crop = "Tomato"
+		elif result==1:
+			crop = "Potato"
+		elif result==2:
+			crop = "Soyabean"
+		elif result==3:
+			crop = "Strawberry"
+		elif result==4:
+			crop = "Bell Pepper"
+		elif result==5:
+			crop = "Raspberry"
+		elif result==6:
+			crop = "Peach"
+		elif result==7:
+			crop = "Grapes"
+		elif result==8:
+			crop = "Orange"
+		elif result==9:
+			crop = "Corn"
+		elif result==10:
+			crop = "Cherry"
+		else:
+			crop = "can't help you sorry"
+		return render(request,"crop/crop_predict.html",{"crop":crop})
 	states = State.objects.all()
-	print(states)
+	# crop = states
 	return render(request, 'crop/land_details.html', {"states": states})
 
 
@@ -189,5 +235,5 @@ def disease_solutions(request,st):
 def get_dist(request):
 	dists = District.objects.filter(state=request.GET['state'])
 	dists = serializers.serialize("json",dists)
-	print(dists)
+	# crop = dists
 	return JsonResponse(dists, safe=False)
