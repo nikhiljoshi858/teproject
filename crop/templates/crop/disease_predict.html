@@ -3,22 +3,33 @@
 {% block content %}
 <div class="jumbotron">
     <h1 class="text-center">Disease Identification</h1><br>
+    {% if disease != 'healthy' %}
     <div class="row">
         <div class="col-md-6">
             <h3>Identified Crop based on your image </h3>
             <h4><strong>{{crop}}</strong></h4><br>
-            {% if disease != 'healthy' %}
             <h3>Identified Disease based on your image </h3>
             <h4> <strong>{{disease}}</strong></h4><br>
+            <h3>Accuracy = <strong>{{prob}}%</strong></h3><br>
             <a href="/disease/solutions/{{st}}" class="btn btn-primary">View Solutions</a>
-            {% else %}
-            <h4><strong>Your Crop is healthy. You need not worry!!!</strong></h4><br>
         </div>
-            <div class="col-md-6">
-                <img src="/media/{{file_name}}" alt="Image">
-            </div>
-            {% endif %}
+        <div class="col-md-6">
+            <img src="/media/{{file_name}}" alt="Image">
+        </div>
     </div>
+    {% else %}
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Identified Crop based on your image </h3>
+            <h4><strong>{{crop}}</strong></h4><br>
+            <h4><strong>Your Crop is healthy. You need not worry!!!</strong></h4><br>
+            <h3>Accuracy = <strong>{{prob}}%</strong></h3><br>
+        </div>
+        <div class="col-md-6">
+            <img src="/media/{{file_name}}" alt="Image">
+        </div>
+    </div>
+    {% endif %}
 </div>
 <br><br>
 {% endblock %}

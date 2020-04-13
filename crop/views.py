@@ -115,7 +115,12 @@ def crop_predict_land(request):
 		elif today<=12:
 			quat = 4
 		ls = [quat,rain,temp,hum]+list(request.POST["soil"])
+		ls[-1] = int(ls[-1])
+		ls[-2] = int(ls[-2])
+		ls[-3] = int(ls[-3])
+		# return HttpResponse(str(ls))
 		result = model.predict([ls])
+		prob = model.predict_proba([ls])
 		result = int(result)
 		if result==0:
 			crop = "Tomato"
@@ -139,11 +144,9 @@ def crop_predict_land(request):
 			crop = "Corn"
 		elif result==10:
 			crop = "Cherry"
-		else:
-			crop = "can't help you sorry"
-		return render(request,"crop/crop_predict.html",{"crop":crop})
+		prob = max(prob[0]) * 100
+		return render(request,"crop/crop_predict.html",{"crop":crop,"prob":prob})
 	states = State.objects.all()
-	# crop = states
 	return render(request, 'crop/land_details.html', {"states": states})
 
 
@@ -167,6 +170,8 @@ def disease_predict_upload(request):
 			# return HttpResponse(img3.shape)
 			loaded_model = load_model(settings.MEDIA_ROOT+"/disease_model_final.h5")
 			predicted = loaded_model.predict_classes(img3)
+			prob = max(loaded_model.predict_proba(img3)[0]) * 100
+			# return HttpResponse(prob)
 			mapping = {'Apple___Apple_scab': 0,
 			'Apple___Black_rot': 1,
 			'Apple___Cedar_apple_rust': 2,
@@ -211,7 +216,7 @@ def disease_predict_upload(request):
 				if value == predict:
 					st = key
 			crop,disease = st.split("___")
-			return render(request, "crop/disease_predict.html", context={'file_name':file_name,"st":st,"crop":crop,"disease":disease})
+			return render(request, "crop/disease_predict.html", context={'file_name':file_name,"st":st,"crop":crop,"disease":disease,'prob':prob})
 		else:
 			return HttpResponse("error")
 	form = DiseaseImageForm()
