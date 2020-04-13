@@ -15,6 +15,7 @@ dj-database-url==0.5.0
 Django==3.0.1
 django-tinymce4-lite==1.7.5
 djangorestframework==3.11.0
+django_extensions==2.2.9
 dm-sonnet==1.23
 easydict==1.8
 entrypoints==0.3
