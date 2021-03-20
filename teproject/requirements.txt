@@ -33,7 +33,7 @@ ipywidgets==7.5.1
 isort==4.3.21
 itsdangerous==1.1.0
 jedi==0.15.1
-Jinja2==2.10.1
+Jinja2==2.11.3
 joblib==0.14.1
 jsmin==2.2.2
 json5==0.8.5
