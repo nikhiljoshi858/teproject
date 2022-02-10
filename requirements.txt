@@ -63,7 +63,7 @@ networkx==2.2
 notebook==6.0.1
 numpy==1.16.2
 opencv-contrib-python-headless==4.2.0.34
-tensorflow==1.15.0
+tensorflow==2.5.3
 pandas==0.25.3
 pandocfilters==1.4.2
 parso==0.5.1
